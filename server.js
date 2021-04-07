@@ -1,26 +1,26 @@
-const express = require('express')
-const app = express()
-const MongoClient = require('mongodb').MongoClient
-const PORT = 2121
-require('dotenv').config()
+const express = require('express')//Loads express module
+const app = express()//Creates a faster-to-use variable for the above module
+const MongoClient = require('mongodb').MongoClient//Loads mongodb
+const PORT = 2121//Establishes listening port for server
+require('dotenv').config()//Allows for the .env file to be used for hidden data
 
-let db,
-    dbConnectionStr = process.env.DB_STRING,
-    dbName = 'todo'
+let db,//Declaring the variable for the database
+    dbConnectionStr = process.env.DB_STRING,//Assigning the string which contsins the login creds from the dotenv
+    dbName = 'todo'//Declaring the string that points to our database name
 
-MongoClient.connect(dbConnectionStr, {useUnifiedTopology: true})
-    .then(client => {
-        console.log(`Hey, connected to ${dbName} database`)
-        db = client.db(dbName)
+MongoClient.connect(dbConnectionStr, {useUnifiedTopology: true})//Tells the mongodb modules to use the .connect() method and connect with the database
+    .then(client => {//Upon fulfilling the promise
+        console.log(`Hey, connected to ${dbName} database`)//Print a succesful connection console log
+        db = client.db(dbName)//Assign the property of db of the client object with an argument of our database name to our db variable
     })
-    .catch(err =>{
-        console.log(err)
+    .catch(err =>{//unless an error has occurred
+        console.log(err)//then console log the error
     })
 
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+app.set('view engine', 'ejs')//Sets express to use ejs to be viewed in the DOM
+app.use(express.static('public'))//Points to our public directory that will contain js and css files that the index.ejs will  link to and use
+app.use(express.urlencoded({extended: true}))//I DON'T KNOW
+app.use(express.json())//Tells express to format data in JSON objects
 
 app.get('/', async (req, res) => {
     const todoItems = await db.collection('todos').find().toArray()
