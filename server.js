@@ -22,7 +22,7 @@ app.use(express.static('public'))//Points to our public directory that will cont
 app.use(express.urlencoded({extended: true}))//I DON'T KNOW
 app.use(express.json())//Tells express to format data in JSON objects
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res) => {//Get request to load the main
     const todoItems = await db.collection('todos').find().toArray()
     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
     res.render('index.ejs', {zebra: todoItems, left: itemsLeft})
